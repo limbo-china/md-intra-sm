@@ -237,6 +237,7 @@ void adjustAtoms(struct SystemStr* sys){
 
     MPI_Win win;
     int recv,recv1,recv2;
+    printf("%d :\n",sizeof(AtomData) );
 
     beginTimer(communication);
     for(int dimen = 0;dimen<6;dimen++){
