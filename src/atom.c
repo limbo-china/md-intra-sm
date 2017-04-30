@@ -249,7 +249,7 @@ void adjustAtoms(struct SystemStr* sys){
         for (int i=0; i<sys->datacomm->commCellNum[dimen]; i++)
             PutSize += sys->cells->atomNum[sys->datacomm->commCells[dimen][i]];
         
-        printf("%d: \n",PutSize*sizeof(AtomData));
+        printf("%d: \n",PutSize/2*sizeof(AtomData));
         MPI_Win_allocate_shared((MPI_Aint)PutSize/2*sizeof(AtomData), sizeof(char),
          MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, &win);
 
