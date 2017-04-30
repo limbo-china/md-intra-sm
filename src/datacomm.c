@@ -154,7 +154,7 @@ void procRecvData(struct SystemStr* sys, void* buf, int size){
       	id = buffer[num].id;
       	
       	// 将原子分配至对应的细胞中
-        if(getMyRank()==2){
+        if(getMyRank()==1){
             printf("num :%d \n",num );
         }
       	assignAtom(id, pos, sys, momenta);
