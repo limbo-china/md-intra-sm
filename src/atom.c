@@ -251,8 +251,11 @@ void adjustAtoms(struct SystemStr* sys){
         int n_dimen = dimen + (dimen%2)?-1:1;
         neighbor = sys->datacomm->neighborProc[n_dimen];
 
-        if(getMyRank()==2)
+        if(getMyRank()==2){
+            for(int i=0;i<6;i++)
+                printf("%d \n",sys->datacomm->neighborProc[i] );
             printf("neighbor:%d\n",neighbor);
+        }
 
         int PutSize=0;
 
