@@ -14,7 +14,7 @@ typedef struct DataCommStr{
 	// 邻居进程的序号
 	int neighborProc[6];
 
-	// 缓冲区大小
+	// 各个维度的缓冲区大小
 	int bufSize;
 
 	// 各方向上需要通信的细胞数量

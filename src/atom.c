@@ -224,27 +224,39 @@ void adjustAtoms(struct SystemStr* sys){
     //printf("adjust\n");
 
     // 与各邻居进程进行通信
-    enum Neighbor dimen_POSI, dimen_NEGA;
-    int neighbor_NEGA,neighbor_POSI;
+    //enum Neighbor dimen;
+    int neighbor;
 
     // 4个缓冲区，正负轴上发送缓冲区和接收缓冲区
+
+    // 内存共享，直接取数据，而不是点对点通信
     int bufsize = sys->datacomm->bufSize;
-    char* negSendBuf = malloc(bufsize);
-    char* posSendBuf = malloc(bufsize);
-    char* negRecvBuf = malloc(bufsize);
-    char* posRecvBuf = malloc(bufsize);
+    char* PutBuf;
+    char* negGetBuf = malloc(bufsize);
+    char* posGetBuf = malloc(bufsize);
+
+    MPI_Win win;
+    int recv,recv1,recv2;
 
     beginTimer(communication);
-    for(int dimen = 0;dimen<3;dimen++){
-        dimen_NEGA = 2*dimen;
-        dimen_POSI = 2*dimen + 1;
+    for(int dimen = 0;dimen<6;dimen++){
 
-        neighbor_NEGA = sys->datacomm->neighborProc[dimen_NEGA];
-        neighbor_POSI = sys->datacomm->neighborProc[dimen_POSI];
+        int n_dimen = dimen + (dimen%2)?-1:1;
+        neighbor = sys->datacomm->neighborProc[n_dimen];
+
+        int PutSize=0;
+
+        for (int i=0; i<sys->datacomm->commCellNum[dimen]; i++)
+            PutSize += sys->cells->atomNum[sys->datacomm->commCells[dimen][i]];
+        
+        MPI_Win_allocate_shared((MPI_Aint)PutSize*sizeof(AtomData), 1,
+         MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, &win);
 
         // 将数据加入发送缓冲区
-        int neg_send = addSendData(sys, negSendBuf, dimen_NEGA);
-        int pos_send = addSendData(sys, posSendBuf, dimen_POSI);
+        MPI_Win_fence(0,win);
+        addSendData(sys, PutBuf, dimen);
+        MPI_Win_fence(0,win);
+        //int pos_send = addSendData(sys, posSendBuf, dimen_POSI);
         //printf("addsend\n");
         // if (ifZeroRank())
         // {
@@ -252,18 +264,30 @@ void adjustAtoms(struct SystemStr* sys){
         // }
 
         // 调用mpi_sendrecv函数，与邻居进程发送与接收原子数据
-        int neg_recv,pos_recv;
 
-        
-        MPI_Status status1,status2;
-        MPI_Sendrecv(negSendBuf, neg_send*sizeof(AtomData), MPI_BYTE, neighbor_NEGA, 0,
-                posRecvBuf, bufsize, MPI_BYTE, neighbor_POSI, 0,
-                MPI_COMM_WORLD, &status1);
-        MPI_Get_count(&status1, MPI_BYTE, &pos_recv);
-        MPI_Sendrecv(posSendBuf, pos_send*sizeof(AtomData), MPI_BYTE, neighbor_POSI, 0,
-                negRecvBuf, bufsize, MPI_BYTE, neighbor_NEGA, 0,
-                MPI_COMM_WORLD, &status2);
-        MPI_Get_count(&status2, MPI_BYTE, &neg_recv);
+        MPI_Win_shared_query(win,neighbor, &recv, NULL, NULL);
+
+        if(dimen%2 == 0){
+            recv1 = recv;
+            MPI_Get(negGetBuf, recv1,
+                MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
+                recv1, MPI_BYTE,win);
+        }
+        else{
+            recv2 = recv;
+            MPI_Get(posGetBuf, recv2,
+                MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
+                recv2, MPI_BYTE,win);
+        }
+        // MPI_Status status1,status2;
+        // MPI_Sendrecv(negSendBuf, neg_send*sizeof(AtomData), MPI_BYTE, neighbor_NEGA, 0,
+        //         posRecvBuf, bufsize, MPI_BYTE, neighbor_POSI, 0,
+        //         MPI_COMM_WORLD, &status1);
+        // MPI_Get_count(&status1, MPI_BYTE, &pos_recv);
+        // MPI_Sendrecv(posSendBuf, pos_send*sizeof(AtomData), MPI_BYTE, neighbor_POSI, 0,
+        //         negRecvBuf, bufsize, MPI_BYTE, neighbor_NEGA, 0,
+        //         MPI_COMM_WORLD, &status2);
+        // MPI_Get_count(&status2, MPI_BYTE, &neg_recv);
        
         //printf("sendrecv\n");
 
@@ -273,13 +297,17 @@ void adjustAtoms(struct SystemStr* sys){
         // }
 
         // 处理接收到的原子数据，将原子分配至细胞中
-        procRecvData(sys, posRecvBuf, pos_recv/sizeof(AtomData));
-        procRecvData(sys, negRecvBuf, neg_recv/sizeof(AtomData));
+        if(dimen%2){
+            procRecvData(sys, posGetBuf, recv2/sizeof(AtomData));
+            procRecvData(sys, negGetBuf, recv1/sizeof(AtomData));
+        }
+
+        MPI_Win_free(&win);
     }
-     endTimer(communication);
+    endTimer(communication);
 
     // 通信结束，释放缓冲区
-    free(negSendBuf);free(posSendBuf);free(negRecvBuf);free(posRecvBuf);
+    free(posGetBuf);free(negGetBuf);
 }
 
 // 将cell1中的第N个原子移动到cell2中
