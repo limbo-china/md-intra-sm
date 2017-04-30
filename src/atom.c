@@ -262,7 +262,8 @@ void adjustAtoms(struct SystemStr* sys){
 
         // 将数据加入发送缓冲区
         
-        addSendData(sys, PutBuf, dimen);
+        int num = addSendData(sys, PutBuf, dimen);
+        printf("%d: \n",num );
         MPI_Win_fence(0,win);
         //int pos_send = addSendData(sys, posSendBuf, dimen_POSI);
         //printf("addsend\n");
