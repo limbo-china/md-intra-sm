@@ -114,6 +114,9 @@ void assignAtom(int id, double3 xyzpos, struct SystemStr* sys, double3 momenta){
     // 根据原子坐标找到对应的细胞
     int cell = findCellByCoord(sys->cells, sys->space, xyzpos);
 
+    if(getMyRank()==2){
+        printf("cell :%d\n",cell );
+    }
     // 计算此原子为本空间第几个原子
     int n = cell*MAXPERCELL;
     n = n + sys->cells->atomNum[cell];
