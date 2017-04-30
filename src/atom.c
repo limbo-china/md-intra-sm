@@ -114,9 +114,9 @@ void assignAtom(int id, double3 xyzpos, struct SystemStr* sys, double3 momenta){
     // 根据原子坐标找到对应的细胞
     int cell = findCellByCoord(sys->cells, sys->space, xyzpos);
 
-    if(getMyRank()==2){
-        printf("cell :%d\n",cell );
-    }
+    // if(getMyRank()==2){
+    //     printf("cell :%d\n",cell );
+    // }
     // 计算此原子为本空间第几个原子
     int n = cell*MAXPERCELL;
     n = n + sys->cells->atomNum[cell];
@@ -251,6 +251,9 @@ void adjustAtoms(struct SystemStr* sys){
         int n_dimen = dimen + (dimen%2)?-1:1;
         neighbor = sys->datacomm->neighborProc[n_dimen];
 
+        if(getMyRank()==2)
+            printf("neighbor:%d\n",neighbor);
+
         int PutSize=0;
 
         for (int i=0; i<sys->datacomm->commCellNum[dimen]; i++)
@@ -262,8 +265,8 @@ void adjustAtoms(struct SystemStr* sys){
 
         // 将数据加入发送缓冲区
         
-        int num = addSendData(sys, PutBuf, dimen);
-        printf("%d: \n",num );
+        addSendData(sys, PutBuf, dimen);
+        //printf("%d: \n",num );
         MPI_Win_fence(0,win);
         //int pos_send = addSendData(sys, posSendBuf, dimen_POSI);
         //printf("addsend\n");
