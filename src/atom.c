@@ -248,7 +248,7 @@ void adjustAtoms(struct SystemStr* sys){
     beginTimer(communication);
     for(int dimen = 0;dimen<6;dimen++){
 
-        int n_dimen = dimen + (dimen%2)?(-1):(1);
+        int n_dimen = dimen + (dimen%2)?-1:1;
         neighbor = sys->datacomm->neighborProc[n_dimen];
 
         if(getMyRank()==2){
