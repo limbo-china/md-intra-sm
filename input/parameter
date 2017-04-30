@@ -1,0 +1,13 @@
+#input file. give neccessary parameters.
+
+potentialName=default
+xLatticeNum=20
+yLatticeNum=20
+zLatticeNum=20
+xProcessNum=4
+yProcessNum=4
+zProcessNum=default
+stepNums=100
+printNums=20
+stepTime=1.0
+initialTemperature=default
