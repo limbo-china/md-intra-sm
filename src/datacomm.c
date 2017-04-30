@@ -84,7 +84,7 @@ int* findCommCells(struct CellStr* cells, enum Neighbor dimen, int num){
 }
 
 // 将待发送的原子数据加入缓冲区内,返回加入缓冲区内的数据个数
-// int addSendData(struct SystemStr* sys, void* buf, enum Neighbor dimen){
+ int addSendData(struct SystemStr* sys, void* buf, enum Neighbor dimen){
 
 	int num = 0;
    	AtomData* buffer = (AtomData*) buf; // 可改进为拥有自己的缓冲区
