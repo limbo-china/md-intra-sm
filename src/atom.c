@@ -246,7 +246,7 @@ void adjustAtoms(struct SystemStr* sys){
     char *getbuf = NULL;
 
     beginTimer(communication);
-    for(int dimen = 0;dimen<1;dimen++){
+    for(int dimen = 0;dimen<6;dimen++){
 
         int n_dimen = dimen + (dimen%2)?-1:1;
         neighbor = sys->datacomm->neighborProc[n_dimen];
