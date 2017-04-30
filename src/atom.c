@@ -243,7 +243,7 @@ void adjustAtoms(struct SystemStr* sys){
     char *getbuf = NULL;
 
     beginTimer(communication);
-    for(int dimen = 0;dimen<2;dimen++){
+    for(int dimen = 0;dimen<6;dimen++){
 
         int n_dimen = dimen + (dimen%2)?-1:1;
         neighbor = sys->datacomm->neighborProc[n_dimen];
@@ -313,6 +313,7 @@ void adjustAtoms(struct SystemStr* sys){
             printf("recv2:%d recv1:%d\n",recv2,recv1 );
             procRecvData(sys, posGetBuf, recv2/sizeof(AtomData));
             procRecvData(sys, negGetBuf, recv1/sizeof(AtomData));
+            printf("procdata success\n");
         }
 
         MPI_Win_fence(0,win);
