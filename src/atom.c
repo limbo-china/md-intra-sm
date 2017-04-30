@@ -246,7 +246,7 @@ void adjustAtoms(struct SystemStr* sys){
     char *getbuf = NULL;
 
     beginTimer(communication);
-    for(int dimen = 0;dimen<6;dimen++){
+    for(int dimen = 0;dimen<1;dimen++){
 
         int n_dimen = dimen + (dimen%2)?-1:1;
         neighbor = sys->datacomm->neighborProc[n_dimen];
@@ -318,8 +318,8 @@ void adjustAtoms(struct SystemStr* sys){
         // 处理接收到的原子数据，将原子分配至细胞中
         if(dimen%2){
             printf("p %d:recv2:%d recv1:%d\n",getMyRank(),recv2,recv1 );
-            procRecvData(sys, posGetBuf, recv2/sizeof(AtomData));
             procRecvData(sys, negGetBuf, recv1/sizeof(AtomData));
+            procRecvData(sys, posGetBuf, recv2/sizeof(AtomData));        
             printf("p %d:procdata success\n",getMyRank());
         }
 
