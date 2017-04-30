@@ -264,8 +264,8 @@ void adjustAtoms(struct SystemStr* sys){
         // }
 
         // 调用mpi_sendrecv函数，与邻居进程发送与接收原子数据
-
-        MPI_Win_shared_query(win,neighbor, (MPI_Aint*)&recv, NULL, NULL);
+        int t;
+        MPI_Win_shared_query(win,neighbor, (MPI_Aint*)&recv, &t, NULL);
 
         if(dimen%2 == 0){
             recv1 = recv;
