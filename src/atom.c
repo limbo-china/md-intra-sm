@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 #include <mpi.h>
 
 // 初始化原子信息结构体
@@ -242,7 +243,7 @@ void adjustAtoms(struct SystemStr* sys){
     char *getbuf = NULL;
 
     beginTimer(communication);
-    for(int dimen = 0;dimen<2;dimen++){
+    for(int dimen = 0;dimen<6;dimen++){
 
         int n_dimen = dimen + (dimen%2)?-1:1;
         neighbor = sys->datacomm->neighborProc[n_dimen];
@@ -270,18 +271,22 @@ void adjustAtoms(struct SystemStr* sys){
         // 调用mpi_sendrecv函数，与邻居进程发送与接收原子数据
         
         MPI_Win_shared_query(win,neighbor, &recv, &t, &getbuf);
-        printf("%d \n",recv );
+        //printf("%d \n",recv );
 
         if(dimen%2 == 0){
             recv1 = recv;
-            negGetBuf = getbuf;
+
+            negGetBuf = (char *)malloc(recv1);
+            memcpy(negGetBuf,getbuf,recv1);
             // MPI_Get(negGetBuf, recv1,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
             //     recv1, MPI_BYTE,win);
         }
         else{
             recv2 = recv;
-            posGetBuf = getbuf;
+            
+            posGetBuf = (char *)malloc(recv2);
+            memcpy(posGetBuf,getbuf,recv2);
             // MPI_Get(posGetBuf, recv2,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
             //     recv2, MPI_BYTE,win);
