@@ -253,7 +253,7 @@ void adjustAtoms(struct SystemStr* sys){
          MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, &win);
 
         // 将数据加入发送缓冲区
-        MPI_Win_fence(0,win);
+        
         addSendData(sys, PutBuf, dimen);
         MPI_Win_fence(0,win);
         //int pos_send = addSendData(sys, posSendBuf, dimen_POSI);
@@ -302,6 +302,7 @@ void adjustAtoms(struct SystemStr* sys){
             procRecvData(sys, negGetBuf, recv1/sizeof(AtomData));
         }
 
+        MPI_Win_fence(0,win);
         MPI_Win_free(&win);
     }
     endTimer(communication);
