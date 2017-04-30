@@ -248,15 +248,15 @@ void adjustAtoms(struct SystemStr* sys){
     beginTimer(communication);
     for(int dimen = 0;dimen<6;dimen++){
 
-        int n_dimen = dimen + (dimen%2)?-1:1;
+        int n_dimen = dimen + ((dimen%2==0)?(1):(-1));
         neighbor = sys->datacomm->neighborProc[n_dimen];
 
-        if(getMyRank()==2){
-            // for(int i=0;i<6;i++)
-            //     printf("%d \n",sys->datacomm->neighborProc[i] );
-            printf("(dimen%2)?-1:1---%d \n", ((dimen%2==0)?(1):(-1)));
-            printf("dimen:%d n_dimen:%d neighbor:%d\n",dimen,n_dimen,neighbor);
-        }
+        // if(getMyRank()==2){
+        //     // for(int i=0;i<6;i++)
+        //     //     printf("%d \n",sys->datacomm->neighborProc[i] );
+        //     printf("(dimen%2)?-1:1---%d \n", ((dimen%2==0)?(1):(-1)));
+        //     printf("dimen:%d n_dimen:%d neighbor:%d\n",dimen,n_dimen,neighbor);
+        // }
 
         int PutSize=0;
 
