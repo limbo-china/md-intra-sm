@@ -144,7 +144,6 @@ void procRecvData(struct SystemStr* sys, void* buf, int size){
 	double3 momenta; //原子动量
 
 	int id;
-  printf("----1\n");
 	for (int num=0; num<size; num++)
    	{     	
       	for(int i=0;i<3;i++)
@@ -155,9 +154,10 @@ void procRecvData(struct SystemStr* sys, void* buf, int size){
       	id = buffer[num].id;
       	
       	// 将原子分配至对应的细胞中
-        
+        if(getMyRank()==2){
+            printf("num :%d \n",num );
+        }
       	assignAtom(id, pos, sys, momenta);
         
    	}
-    printf("----2\n");
 }
