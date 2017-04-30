@@ -271,7 +271,7 @@ void adjustAtoms(struct SystemStr* sys){
         
         addSendData(sys, PutBuf, dimen);
         //printf("%d: \n",num );
-        MPI_Win_fence(0,win);
+        //MPI_Win_fence(0,win);
         //int pos_send = addSendData(sys, posSendBuf, dimen_POSI);
         //printf("addsend\n");
         // if (ifZeroRank())
@@ -327,7 +327,7 @@ void adjustAtoms(struct SystemStr* sys){
         //     printf("p %d:procdata success\n",getMyRank());
         // }
 
-        MPI_Win_fence(0,win);
+        //MPI_Win_fence(0,win);
         MPI_Win_free(&win);
     }
     endTimer(communication);
