@@ -232,11 +232,14 @@ void adjustAtoms(struct SystemStr* sys){
     // 内存共享，直接取数据，而不是点对点通信
     int bufsize = sys->datacomm->bufSize;
     char* PutBuf;
-    char* negGetBuf = malloc(bufsize);
-    char* posGetBuf = malloc(bufsize);
+    char* negGetBuf = NULL;
+    char* posGetBuf = NULL;
 
     MPI_Win win;
-    int recv,recv1,recv2;
+    MPI_Aint recv;
+    int recv1,recv2;
+    int t;
+    char *getbuf = NULL;
 
     beginTimer(communication);
     for(int dimen = 0;dimen<2;dimen++){
@@ -249,8 +252,8 @@ void adjustAtoms(struct SystemStr* sys){
         for (int i=0; i<sys->datacomm->commCellNum[dimen]; i++)
             PutSize += sys->cells->atomNum[sys->datacomm->commCells[dimen][i]];
         
-        printf("%d: \n",PutSize/2*sizeof(AtomData));
-        MPI_Win_allocate_shared((MPI_Aint)PutSize/2*sizeof(AtomData), sizeof(char),
+        //printf("%d: \n",PutSize*sizeof(AtomData));
+        MPI_Win_allocate_shared(PutSize*sizeof(AtomData), sizeof(char),
          MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, &win);
 
         // 将数据加入发送缓冲区
@@ -265,20 +268,22 @@ void adjustAtoms(struct SystemStr* sys){
         // }
 
         // 调用mpi_sendrecv函数，与邻居进程发送与接收原子数据
-        int t;
-        MPI_Win_shared_query(win,neighbor, (MPI_Aint*)&recv, &t, &t);
+        
+        MPI_Win_shared_query(win,neighbor, &recv, &t, &getbuf);
 
         if(dimen%2 == 0){
             recv1 = recv;
-            MPI_Get(negGetBuf, recv1,
-                MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
-                recv1, MPI_BYTE,win);
+            negGetBuf = getbuf;
+            // MPI_Get(negGetBuf, recv1,
+            //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
+            //     recv1, MPI_BYTE,win);
         }
         else{
             recv2 = recv;
-            MPI_Get(posGetBuf, recv2,
-                MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
-                recv2, MPI_BYTE,win);
+            posGetBuf = getbuf;
+            // MPI_Get(posGetBuf, recv2,
+            //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
+            //     recv2, MPI_BYTE,win);
         }
         // MPI_Status status1,status2;
         // MPI_Sendrecv(negSendBuf, neg_send*sizeof(AtomData), MPI_BYTE, neighbor_NEGA, 0,
@@ -309,7 +314,7 @@ void adjustAtoms(struct SystemStr* sys){
     endTimer(communication);
 
     // 通信结束，释放缓冲区
-    free(posGetBuf);free(negGetBuf);
+    //free(posGetBuf);free(negGetBuf);
 }
 
 // 将cell1中的第N个原子移动到cell2中
