@@ -230,7 +230,7 @@ void adjustAtoms(struct SystemStr* sys){
     // 4个缓冲区，正负轴上发送缓冲区和接收缓冲区
 
     // 内存共享，直接取数据，而不是点对点通信
-    int bufsize = sys->datacomm->bufSize;
+    //int bufsize = sys->datacomm->bufSize;
     char* PutBuf;
     char* negGetBuf = NULL;
     char* posGetBuf = NULL;
@@ -270,6 +270,7 @@ void adjustAtoms(struct SystemStr* sys){
         // 调用mpi_sendrecv函数，与邻居进程发送与接收原子数据
         
         MPI_Win_shared_query(win,neighbor, &recv, &t, &getbuf);
+        printf("%d \n",recv );
 
         if(dimen%2 == 0){
             recv1 = recv;

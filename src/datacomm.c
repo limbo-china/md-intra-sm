@@ -39,10 +39,10 @@ void initComm(DataComm** comm, struct SpacialStr* space, struct CellStr* cells){
     // 		printf("%d ",datacomm->neighborProc[i]);
 
     // 各方向需要通信的细胞数的最大值
-    int maxComm = MAX((xyzCellNum[0]+2)*(xyzCellNum[1]+2),
-    	MAX((xyzCellNum[1]+2)*(xyzCellNum[2]+2),
-    		(xyzCellNum[0]+2)*(xyzCellNum[2]+2)));
-    datacomm->bufSize = 2*maxComm*MAXPERCELL*sizeof(AtomData); //可改进为每个面需要自己的细胞数量
+    // int maxComm = MAX((xyzCellNum[0]+2)*(xyzCellNum[1]+2),
+    // 	MAX((xyzCellNum[1]+2)*(xyzCellNum[2]+2),
+    // 		(xyzCellNum[0]+2)*(xyzCellNum[2]+2)));
+    // datacomm->bufSize = 2*maxComm*MAXPERCELL*sizeof(AtomData); //可改进为每个面需要自己的细胞数量
 
     datacomm->commCellNum[X_NEG] = 2*(xyzCellNum[1]+2)*(xyzCellNum[2]+2);
    	datacomm->commCellNum[X_POS] = 2*(xyzCellNum[1]+2)*(xyzCellNum[2]+2);
@@ -84,7 +84,7 @@ int* findCommCells(struct CellStr* cells, enum Neighbor dimen, int num){
 }
 
 // 将待发送的原子数据加入缓冲区内,返回加入缓冲区内的数据个数
-int addSendData(struct SystemStr* sys, void* buf, enum Neighbor dimen){
+// int addSendData(struct SystemStr* sys, void* buf, enum Neighbor dimen){
 
 	int num = 0;
    	AtomData* buffer = (AtomData*) buf; // 可改进为拥有自己的缓冲区
