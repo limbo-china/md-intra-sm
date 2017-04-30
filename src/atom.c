@@ -271,7 +271,7 @@ void adjustAtoms(struct SystemStr* sys){
         
         addSendData(sys, PutBuf, dimen);
         //printf("%d: \n",num );
-        //MPI_Win_fence(0,win);
+        MPI_Win_fence(0,win);
         //int pos_send = addSendData(sys, posSendBuf, dimen_POSI);
         //printf("addsend\n");
         // if (ifZeroRank())
@@ -287,8 +287,10 @@ void adjustAtoms(struct SystemStr* sys){
         if(dimen%2 == 0){
             recv1 = recv;
 
+            beginTimer(test);
             negGetBuf = (char *)malloc(recv1);
             memcpy(negGetBuf,getbuf,recv1);
+            endTimer(test);
             // MPI_Get(negGetBuf, recv1,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
             //     recv1, MPI_BYTE,win);
@@ -296,8 +298,10 @@ void adjustAtoms(struct SystemStr* sys){
         else{
             recv2 = recv;
 
+            beginTimer(test);
             posGetBuf = (char *)malloc(recv2);
             memcpy(posGetBuf,getbuf,recv2);
+            endTimer(test);
             // MPI_Get(posGetBuf, recv2,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
             //     recv2, MPI_BYTE,win);
@@ -327,7 +331,7 @@ void adjustAtoms(struct SystemStr* sys){
         //     printf("p %d:procdata success\n",getMyRank());
         // }
 
-        //MPI_Win_fence(0,win);
+        MPI_Win_fence(0,win);
         MPI_Win_free(&win);
     }
     endTimer(communication);
