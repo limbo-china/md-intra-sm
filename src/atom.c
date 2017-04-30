@@ -250,7 +250,7 @@ void adjustAtoms(struct SystemStr* sys){
             PutSize += sys->cells->atomNum[sys->datacomm->commCells[dimen][i]];
         
         printf("%d: \n",PutSize*sizeof(AtomData));
-        MPI_Win_allocate_shared((MPI_Aint)PutSize*sizeof(AtomData), sizeof(char),
+        MPI_Win_allocate_shared((MPI_Aint)PutSize/2*sizeof(AtomData), sizeof(char),
          MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, &win);
 
         // 将数据加入发送缓冲区
