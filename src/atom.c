@@ -319,8 +319,9 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             //     recv1, MPI_BYTE,win);
         //}
         //else{
+            printf("start recv2 query\n");
             MPI_Win_shared_query(*win,pos_neighbor, &r2, &t2, &getbuf2);
-            
+            printf("recv2 query success\n");
             memcpy((char *)&recv2,getbuf2,sizeof(int));
             printf("recv2: %d\n",recv2 );
 
