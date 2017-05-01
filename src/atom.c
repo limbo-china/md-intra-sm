@@ -288,7 +288,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         addSendData(sys, PutBuf+2*sizeof(int)+negPutSize*sizeof(AtomData), pos_dimen);
         //endTimer(adjustatom);
         //printf("%d: \n",num );
-       // MPI_Win_fence(0,win);
+       MPI_Win_fence(0,*win);
         //int pos_send = addSendData(sys, posSendBuf, dimen_POSI);
         //printf("addsend\n");
         // if (ifZeroRank())
@@ -357,7 +357,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         // }
              free(posGetBuf);free(negGetBuf);
              printf("4\n");
-        //MPI_Win_fence(0,win);
+        MPI_Win_fence(0,*win);
 
         
     }
