@@ -349,7 +349,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         //     printf("p %d:procdata success\n",getMyRank());
         // }
              free(posGetBuf);free(negGetBuf);
-        MPI_Win_fence(0,win);
+        //MPI_Win_fence(0,win);
 
         
     }
