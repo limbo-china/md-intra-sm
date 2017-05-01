@@ -310,11 +310,11 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             memcpy((char *)&recv1,getbuf1+sizeof(int),sizeof(int));
             //printf("porc %d recv1: %d recv1_t: %d r1:%d\n",getMyRank(),recv1,recv1_t,r1);
 
-            //beginTimer(test);
+            beginTimer(test);
             negGetBuf = (char *)malloc(recv1*sizeof(AtomData));
             memcpy(negGetBuf,getbuf1+2*sizeof(int)+recv1_t*sizeof(AtomData),recv1*sizeof(AtomData));
             //printf("porc %d memcpy1 success\n",getMyRank());
-            //endTimer(test);
+            endTimer(test);
             // MPI_Get(negGetBuf, recv1,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
             //     recv1, MPI_BYTE,win);
@@ -328,8 +328,10 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             //printf("recv2: %d\n",recv2 );
 
             //beginTimer(test);
+            beginTimer(test);
             posGetBuf = (char *)malloc(recv2*sizeof(AtomData));
             memcpy(posGetBuf,getbuf2+2*sizeof(int),recv2*sizeof(AtomData));
+            endTimer(test);
             //printf("memcpy2 success\n");
             //endTimer(test);
             // MPI_Get(posGetBuf, recv2,

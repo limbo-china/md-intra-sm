@@ -96,7 +96,7 @@ int main(int argc, char** argv){
 		//fprintf(stdout, "adjust time: %g\n",getGlobalTime(adjustatom));
 		fprintf(stdout, "通信时间: %g 平均: %g\n",globalcomm,globalcomm/getRankNums());
 		fprintf(stdout, "计算力时间: %g 平均: %g\n------\n",globalforce,globalforce/getRankNums());
-		//fprintf(stdout, "test time: %g\n",getGlobalTime(test));
+		fprintf(stdout, "test time: %g\n",getGlobalTime(test));
 	}
 
 	MPI_Finalize();
