@@ -358,13 +358,14 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         // 处理接收到的原子数据，将原子分配至细胞中
         // if(dimen%2){
         //     printf("p %d:recv2:%d recv1:%d\n",getMyRank(),recv2,recv1 );
-            MPI_Win_fence(0,*win);
+            
              procRecvData(sys, getbuf1+2*sizeof(int)+recv1_t*sizeof(AtomData), recv1);
              procRecvData(sys, getbuf2+2*sizeof(int), recv2);        
              //printf("p %d:procdata success\n",getMyRank());
         // }
              //free(posGetBuf);free(negGetBuf);
              //printf("4\n");
+             MPI_Win_fence(0,*win);
         
  
         
