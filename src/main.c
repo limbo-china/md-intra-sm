@@ -44,6 +44,9 @@ int main(int argc, char** argv){
 	MPI_Win_allocate_shared(sys->datacomm->bufSize+2*sizeof(int), sizeof(char),
           MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, win);
 
+	adjustAtoms(sys,PutBuf,win);
+	computeForce(sys);
+
 	for(int i=1;i<=para->stepNums;i++){
     	updateMomenta(sys, para); 
 
@@ -73,7 +76,7 @@ int main(int argc, char** argv){
 	endTimer(loop);
 	
 	MPI_Win_free(win);
-		
+
 	endTimer(total);
 
 	if(ifZeroRank())

@@ -15,7 +15,7 @@ typedef struct DataCommStr{
 	int neighborProc[6];
 
 	// 各个维度的缓冲区大小
-	//int bufSize;
+	int bufSize;
 
 	// 各方向上需要通信的细胞数量
 	int commCellNum[6];
