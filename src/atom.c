@@ -267,7 +267,7 @@ void adjustAtoms(struct SystemStr* sys){
         beginTimer(test);
         MPI_Win_allocate_shared(PutSize*sizeof(AtomData), sizeof(char),
          MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, &win);
-        endTimer(test);
+        
 
         ///应该拿到外面去，不能每次都开辟一个新窗口，从头到尾都用同一个
 
@@ -287,7 +287,7 @@ void adjustAtoms(struct SystemStr* sys){
         
         MPI_Win_shared_query(win,neighbor, &recv, &t, &getbuf);
         //printf("%d \n",recv );
-
+        endTimer(test);
         if(dimen%2 == 0){
             recv1 = recv;
 
