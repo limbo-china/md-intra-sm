@@ -75,7 +75,7 @@ int main(int argc, char** argv){
     }
 	endTimer(loop);
 	
-	MPI_Win_free(win);
+	MPI_Win_free(&win);
 
 	endTimer(total);
 
