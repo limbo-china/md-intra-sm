@@ -321,7 +321,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         //else{
             printf("start recv2 query\n");
             MPI_Win_shared_query(*win,pos_neighbor, &r2, &t2, &getbuf2);
-            printf("recv2 query success\n");
+            printf("recv2 query success  r2:%d\n",r2);
             memcpy((char *)&recv2,getbuf2,sizeof(int));
             printf("recv2: %d\n",recv2 );
 
