@@ -297,16 +297,17 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         // }
 
         // 调用mpi_sendrecv函数，与邻居进程发送与接收原子数据
-        printf("1\n");
+        //printf("1\n");
         
         MPI_Win_shared_query(*win,neg_neighbor, &r1, &t1, &getbuf1);
         MPI_Win_shared_query(*win,pos_neighbor, &r2, &t2, &getbuf2);
         //printf("%d \n",recv );
 
-        printf("2\n");
+        //printf("2\n");
         //if(dimen%2 == 0){
             memcpy((char *)&recv1_t,getbuf1,sizeof(int));
             memcpy((char *)&recv1,getbuf1+sizeof(int),sizeof(int));
+            printf("recv1: %d recv1_t: %d\n",recv1,recv1_t);
 
             //beginTimer(test);
             negGetBuf = (char *)malloc(recv1*sizeof(AtomData));
