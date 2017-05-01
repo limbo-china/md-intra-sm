@@ -39,12 +39,12 @@ int main(int argc, char** argv){
 	System* sys = initSystem(para);
 
 	char* PutBuf = NULL;
-	MPI_Win *win;
+	MPI_Win win;
 
 	MPI_Win_allocate_shared(sys->datacomm->bufSize+2*sizeof(int), sizeof(char),
-          MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, win);
+          MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, &win);
 
-	adjustAtoms(sys,PutBuf,win);
+	adjustAtoms(sys,PutBuf,&win);
 	computeForce(sys);
 
 	for(int i=1;i<=para->stepNums;i++){
@@ -53,7 +53,7 @@ int main(int argc, char** argv){
     	updatePosition(sys, para);
 
     	//beginTimer(adjustatom);
-    	adjustAtoms(sys,PutBuf,win);
+    	adjustAtoms(sys,PutBuf,&win);
     	//endTimer(adjustatom);
 
     	//beginTimer(force);
