@@ -238,8 +238,8 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
     // 内存共享，直接取数据，而不是点对点通信
     //int bufsize = sys->datacomm->bufSize;
     char* PutBuf = (char *)buf;
-    char* negGetBuf = NULL;
-    char* posGetBuf = NULL;
+    //char* negGetBuf = NULL;
+    //char* posGetBuf = NULL;
    
     MPI_Aint r1,r2;
     int recv1,recv2,recv1_t;
@@ -310,11 +310,11 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             memcpy((char *)&recv1,getbuf1+sizeof(int),sizeof(int));
             //printf("porc %d recv1: %d recv1_t: %d r1:%d\n",getMyRank(),recv1,recv1_t,r1);
 
-            beginTimer(test);
-            negGetBuf = (char *)malloc(recv1*sizeof(AtomData));
-            memcpy(negGetBuf,getbuf1+2*sizeof(int)+recv1_t*sizeof(AtomData),recv1*sizeof(AtomData));
+            //beginTimer(test);
+            //negGetBuf = (char *)malloc(recv1*sizeof(AtomData));
+            //memcpy(negGetBuf,getbuf1+2*sizeof(int)+recv1_t*sizeof(AtomData),recv1*sizeof(AtomData));
             //printf("porc %d memcpy1 success\n",getMyRank());
-            endTimer(test);
+            //endTimer(test);
             // MPI_Get(negGetBuf, recv1,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
             //     recv1, MPI_BYTE,win);
@@ -328,10 +328,10 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             //printf("recv2: %d\n",recv2 );
 
             //beginTimer(test);
-            beginTimer(test);
-            posGetBuf = (char *)malloc(recv2*sizeof(AtomData));
-            memcpy(posGetBuf,getbuf2+2*sizeof(int),recv2*sizeof(AtomData));
-            endTimer(test);
+            //beginTimer(test);
+            //posGetBuf = (char *)malloc(recv2*sizeof(AtomData));
+            //memcpy(posGetBuf,getbuf2+2*sizeof(int),recv2*sizeof(AtomData));
+            //endTimer(test);
             //printf("memcpy2 success\n");
             //endTimer(test);
             // MPI_Get(posGetBuf, recv2,
@@ -359,11 +359,11 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         // if(dimen%2){
         //     printf("p %d:recv2:%d recv1:%d\n",getMyRank(),recv2,recv1 );
             MPI_Win_fence(0,*win);
-             procRecvData(sys, negGetBuf, recv1);
-             procRecvData(sys, posGetBuf, recv2);        
+             procRecvData(sys, getbuf1+2*sizeof(int)+recv1_t*sizeof(AtomData), recv1);
+             procRecvData(sys, getbuf2+2*sizeof(int), recv2);        
         //     printf("p %d:procdata success\n",getMyRank());
         // }
-             free(posGetBuf);free(negGetBuf);
+             //free(posGetBuf);free(negGetBuf);
              //printf("4\n");
         
 
