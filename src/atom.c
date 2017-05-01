@@ -264,8 +264,12 @@ void adjustAtoms(struct SystemStr* sys){
             PutSize += sys->cells->atomNum[sys->datacomm->commCells[dimen][i]];
         
         //printf("%d: \n",PutSize*sizeof(AtomData));
+        beginTimer(test);
         MPI_Win_allocate_shared(PutSize*sizeof(AtomData), sizeof(char),
          MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, &win);
+        endTimer(test);
+
+        ///应该拿到外面去，不能每次都开辟一个新窗口，从头到尾都用同一个
 
         // 将数据加入发送缓冲区
         
@@ -287,10 +291,10 @@ void adjustAtoms(struct SystemStr* sys){
         if(dimen%2 == 0){
             recv1 = recv;
 
-            beginTimer(test);
+            //beginTimer(test);
             negGetBuf = (char *)malloc(recv1);
             memcpy(negGetBuf,getbuf,recv1);
-            endTimer(test);
+            //endTimer(test);
             // MPI_Get(negGetBuf, recv1,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
             //     recv1, MPI_BYTE,win);
@@ -298,10 +302,10 @@ void adjustAtoms(struct SystemStr* sys){
         else{
             recv2 = recv;
 
-            beginTimer(test);
+            //beginTimer(test);
             posGetBuf = (char *)malloc(recv2);
             memcpy(posGetBuf,getbuf,recv2);
-            endTimer(test);
+            //endTimer(test);
             // MPI_Get(posGetBuf, recv2,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
             //     recv2, MPI_BYTE,win);
