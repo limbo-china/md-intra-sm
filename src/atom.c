@@ -308,12 +308,12 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         //if(dimen%2 == 0){
             memcpy((char *)&recv1_t,getbuf1,sizeof(int));
             memcpy((char *)&recv1,getbuf1+sizeof(int),sizeof(int));
-            printf("porc %d recv1: %d recv1_t: %d r1:%d\n",getMyRank(),recv1,recv1_t,r1);
+            //printf("porc %d recv1: %d recv1_t: %d r1:%d\n",getMyRank(),recv1,recv1_t,r1);
 
             //beginTimer(test);
             negGetBuf = (char *)malloc(recv1*sizeof(AtomData));
             memcpy(negGetBuf,getbuf1+2*sizeof(int)+recv1_t*sizeof(AtomData),recv1*sizeof(AtomData));
-            printf("porc %d memcpy1 success\n",getMyRank());
+            //printf("porc %d memcpy1 success\n",getMyRank());
             //endTimer(test);
             // MPI_Get(negGetBuf, recv1,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
@@ -322,16 +322,16 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         //else{
             MPI_Win_fence(0,*win);
 
-            printf("start recv2 query\n");
+           // printf("start recv2 query\n");
             MPI_Win_shared_query(*win,pos_neighbor, &r2, &t2, &getbuf2);
-            printf("recv2 query success  r2:%d\n",r2);
+            //printf("recv2 query success  r2:%d\n",r2);
             memcpy((char *)&recv2,getbuf2,sizeof(int));
-            printf("recv2: %d\n",recv2 );
+            //printf("recv2: %d\n",recv2 );
 
             //beginTimer(test);
             posGetBuf = (char *)malloc(recv2*sizeof(AtomData));
             memcpy(posGetBuf,getbuf2+2*sizeof(int),recv2*sizeof(AtomData));
-            printf("memcpy2 success\n");
+            //printf("memcpy2 success\n");
             //endTimer(test);
             // MPI_Get(posGetBuf, recv2,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
@@ -353,7 +353,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         // {
         //     printf("pos_recv:%d neg_recv:%d\n",pos_recv,neg_recv);
         // }
-            printf("3\n");
+            //printf("3\n");
         // 处理接收到的原子数据，将原子分配至细胞中
         // if(dimen%2){
         //     printf("p %d:recv2:%d recv1:%d\n",getMyRank(),recv2,recv1 );
@@ -362,7 +362,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         //     printf("p %d:procdata success\n",getMyRank());
         // }
              free(posGetBuf);free(negGetBuf);
-             printf("4\n");
+             //printf("4\n");
         MPI_Win_fence(0,*win);
 
         
