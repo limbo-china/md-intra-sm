@@ -9,6 +9,7 @@
 #define kB (8.6173324e-5) //波尔兹曼常数
 
 #include "mytype.h"
+#include <mpi.h>
 
 struct CellStr;
 struct SystemStr;
