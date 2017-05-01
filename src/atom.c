@@ -320,7 +320,6 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             //     recv1, MPI_BYTE,win);
         //}
         //else{
-            MPI_Win_fence(0,*win);
 
            // printf("start recv2 query\n");
             MPI_Win_shared_query(*win,pos_neighbor, &r2, &t2, &getbuf2);
@@ -357,13 +356,14 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         // 处理接收到的原子数据，将原子分配至细胞中
         // if(dimen%2){
         //     printf("p %d:recv2:%d recv1:%d\n",getMyRank(),recv2,recv1 );
+            MPI_Win_fence(0,*win);
              procRecvData(sys, negGetBuf, recv1);
              procRecvData(sys, posGetBuf, recv2);        
         //     printf("p %d:procdata success\n",getMyRank());
         // }
              free(posGetBuf);free(negGetBuf);
              //printf("4\n");
-        MPI_Win_fence(0,*win);
+        
 
         
     }

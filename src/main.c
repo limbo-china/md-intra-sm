@@ -57,9 +57,9 @@ int main(int argc, char** argv){
     	adjustAtoms(sys,PutBuf,&win);
     	//endTimer(adjustatom);
 
-    	//beginTimer(force);
+    	beginTimer(force);
     	computeForce(sys);
-    	//endTimer(force);
+    	endTimer(force);
 
     	updateMomenta(sys, para); 
     	if(i%para->printNums == 0){
@@ -80,14 +80,23 @@ int main(int argc, char** argv){
 
 	endTimer(total);
 
+	double looptime = getGlobalTime(loop);
+	double forcetime =  getGlobalTime(force);
+	double commtime = getGlobalTime(communication);
+	double globalloop=0.0,globalforce=0.0,globalcomm=0.0;
+
+	MPI_Allreduce(&looptime, &globalloop, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+	MPI_Allreduce(&forcetime, &globalforce, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+	MPI_Allreduce(&commtime, &globalcomm, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
 	if(ifZeroRank())
 	{
 		//fprintf(stdout, "total time: %g\n",getGlobalTime(total));
-		fprintf(stdout, "\n------\n循环时间: %g\n",getGlobalTime(loop));
-		fprintf(stdout, "adjust time: %g\n",getGlobalTime(adjustatom));
-		fprintf(stdout, "通信时间: %g\n",getGlobalTime(communication));
-		fprintf(stdout, "计算力时间: %g\n------\n",getGlobalTime(force));
-		fprintf(stdout, "test time: %g\n",getGlobalTime(test));
+		fprintf(stdout, "\n------\n总循环时间: %g 平均: %g\n",globalloop,globalloop/getRankNums());
+		//fprintf(stdout, "adjust time: %g\n",getGlobalTime(adjustatom));
+		fprintf(stdout, "通信时间: %g 平均: %g\n",globalcomm,globalcomm/getRankNums());
+		fprintf(stdout, "计算力时间: %g 平均: %g\n------\n",globalforce,globalforce/getRankNums());
+		//fprintf(stdout, "test time: %g\n",getGlobalTime(test));
 	}
 
 	MPI_Finalize();
