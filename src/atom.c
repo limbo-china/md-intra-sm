@@ -312,6 +312,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             //beginTimer(test);
             negGetBuf = (char *)malloc(recv1*sizeof(AtomData));
             memcpy(negGetBuf,getbuf1+2*sizeof(int)+recv1_t*sizeof(AtomData),recv1*sizeof(AtomData));
+            printf("memcpy success\n");
             //endTimer(test);
             // MPI_Get(negGetBuf, recv1,
             //     MPI_BYTE, neighbor, 0,/*nextrank*(nextrank+1)/2,*/
