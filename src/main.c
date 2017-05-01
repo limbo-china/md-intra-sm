@@ -41,7 +41,7 @@ int main(int argc, char** argv){
 	char* PutBuf = NULL;
 	MPI_Win win;
 
-	printf("size: %d\n",sys->datacomm->bufSize );
+	//printf("size: %d\n",sys->datacomm->bufSize );
 	MPI_Win_allocate_shared(sys->datacomm->bufSize+2*sizeof(int), sizeof(char),
           MPI_INFO_NULL,MPI_COMM_WORLD, &PutBuf, &win);
 
