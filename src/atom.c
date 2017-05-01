@@ -201,10 +201,10 @@ void initTemperature(struct SystemStr* sys, struct ParameterStr* para){
 }
 
 // 调整原子所在细胞，并进行原子数据通信(去掉了序号排序)
-void adjustAtoms(struct SystemStr* sys, void * buf/*, MPI_Win *win*/){
+void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
 
     // 清空本空间外的细胞
-MPI_Win *win;
+
     for (int i=sys->cells->myCellNum; i<sys->cells->totalCellNum; i++)
         sys->cells->atomNum[i] = 0;
 

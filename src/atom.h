@@ -41,7 +41,7 @@ void assignAtom(int id, double3 xyzpos, struct SystemStr* sys, double3 momenta);
 void initTemperature(struct SystemStr* sys, struct ParameterStr* para);
 
 // 调整原子所在细胞，并进行原子数据通信
-void adjustAtoms(struct SystemStr* sys);
+void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win);
 
 // 将cell1中的第N个原子移动到cell2中
 void moveAtom(struct CellStr* cells, Atom* atoms, int n, int cell1, int cell2);
