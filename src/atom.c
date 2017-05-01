@@ -244,7 +244,8 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
     MPI_Aint r1,r2;
     int recv1,recv2,recv1_t;
     int t1,t2;
-    char *getbuf1 = NULL,getbuf2= NULL;
+    char *getbuf1 = NULL;
+    char *getbuf2= NULL;
 
     beginTimer(communication);
     for(int dimen = 0;dimen<3;dimen++){
@@ -320,7 +321,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         //}
         //else{
             MPI_Win_fence(0,*win);
-            
+
             printf("start recv2 query\n");
             MPI_Win_shared_query(*win,pos_neighbor, &r2, &t2, &getbuf2);
             printf("recv2 query success  r2:%d\n",r2);
