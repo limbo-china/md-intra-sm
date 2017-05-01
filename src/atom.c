@@ -308,7 +308,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         //if(dimen%2 == 0){
             memcpy((char *)&recv1_t,getbuf1,sizeof(int));
             memcpy((char *)&recv1,getbuf1+sizeof(int),sizeof(int));
-            //printf("porc %d recv1: %d recv1_t: %d r1:%d\n",getMyRank(),recv1,recv1_t,r1);
+            printf("porc %d recv1: %d recv1_t: %d r1:%d\n",getMyRank(),recv1,recv1_t,r1);
 
             //beginTimer(test);
             //negGetBuf = (char *)malloc(recv1*sizeof(AtomData));
@@ -325,7 +325,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             MPI_Win_shared_query(*win,pos_neighbor, &r2, &t2, &getbuf2);
             //printf("recv2 query success  r2:%d\n",r2);
             memcpy((char *)&recv2,getbuf2,sizeof(int));
-            //printf("recv2: %d\n",recv2 );
+            printf("recv2: %d\n",recv2 );
 
             //beginTimer(test);
             //beginTimer(test);
@@ -361,12 +361,12 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             MPI_Win_fence(0,*win);
              procRecvData(sys, getbuf1+2*sizeof(int)+recv1_t*sizeof(AtomData), recv1);
              procRecvData(sys, getbuf2+2*sizeof(int), recv2);        
-        //     printf("p %d:procdata success\n",getMyRank());
+             printf("p %d:procdata success\n",getMyRank());
         // }
              //free(posGetBuf);free(negGetBuf);
              //printf("4\n");
         
-
+ 
         
     }
     endTimer(communication);
