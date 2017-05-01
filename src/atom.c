@@ -300,7 +300,7 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
         //printf("1\n");
         
         MPI_Win_shared_query(*win,neg_neighbor, &r1, &t1, &getbuf1);
-        MPI_Win_shared_query(*win,pos_neighbor, &r2, &t2, &getbuf2);
+        
         //printf("%d \n",recv );
 
         //printf("2\n");
@@ -319,6 +319,8 @@ void adjustAtoms(struct SystemStr* sys, void * buf, MPI_Win *win){
             //     recv1, MPI_BYTE,win);
         //}
         //else{
+            MPI_Win_shared_query(*win,pos_neighbor, &r2, &t2, &getbuf2);
+            
             memcpy((char *)&recv2,getbuf2,sizeof(int));
             printf("recv2: %d\n",recv2 );
 
